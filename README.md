@@ -1,4 +1,4 @@
-autoxtrabackup
+autoxtrabackup (autoinnobackupex)
 ==============
 
 Automatic MySQL backups using Percona innobackupex (xtrabackup).  
