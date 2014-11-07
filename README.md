@@ -8,7 +8,7 @@ Create full & incremental backups automatically, with configurable retention and
 
 Requirements
 ------------
-Percona-toolkit, download from http://www.percona.com/software/percona-toolkit
+Percona-toolkit, download from http://www.percona.com/software/percona-toolkit  
 This script has been tested on Debian 7 (Wheezy) with percona-toolkit 2.2.11  
 It should work on any MySQL distribution, but it has been tested only on Percona Server 5.6.
 
