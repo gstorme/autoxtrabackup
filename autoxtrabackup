@@ -1,7 +1,6 @@
 #!/bin/bash
 # MySQL backup script
 # Version 0.1 - https://github.com/gregorystorme/autoxtrabackup
-# Version 0.1 - 2014-11-07
 # Copyright (c) 2014 Gregory Storme
 
 
@@ -26,11 +25,11 @@ dateNowUnix=`date +%s`
 backupLog=/tmp/backuplog
 delDay=`date -d "-$keepDays days" +%Y-%m-%d`
 
-if [ $hoursBeforeFull -gt 24 ]; then
- echo "ERROR: hoursBeforeFull variable is greater than 24h. You should take a full backup at least once every 24h with this script"
- exit 1
+if [ $(($keepDays * 24)) -le $hoursBeforeFull ]; then
+        echo "ERROR: You have set hoursBeforeFull to $hoursBeforeFull and keepDays to $keepDays, this will delete all your backups... Change this"
+        exit 1
 else
- :
+        :
 fi
 
 if [[ $compression == yes ]]; then
