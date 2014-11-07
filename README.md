@@ -24,3 +24,7 @@ Remarks
 Incremental backups are only applicable to XtraDB & InnoDB tables.  
 Incremental backups of MyISAM tables are not possible, these will be full backups each time.  
 You can set a retention, how long you want to keep the backups.  
+
+Restoring
+---------
+For information on how to restore a backup with innobackupex, visit http://www.percona.com/doc/percona-xtrabackup/2.1/innobackupex/innobackupex_script.html
