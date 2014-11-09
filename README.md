@@ -2,14 +2,14 @@ autoxtrabackup
 ==============
 
 Automatic MySQL scheduled backups using Percona innobackupex (xtrabackup).  
-This script uses the innobackupex wrapper for xtrabackup from Percona, included in percona-tools.
+This script uses the innobackupex wrapper for xtrabackup from Percona, included in percona-xtrabackup.
 
 Create full & incremental backups automatically, with configurable retention and compression, and optional e-mail output.
 
 Requirements
 ------------
-Percona-toolkit, download from http://www.percona.com/software/percona-toolkit  
-This script has been tested on Debian 7 (Wheezy) with percona-toolkit 2.2.11  
+Percona-xtrabackup, download from http://www.percona.com/software/percona-toolkit  
+This script has been tested on Debian 7 (Wheezy) with percona-xtrabackup 2.2.6  
 It should work on any MySQL distribution, but it has been tested only on Percona Server 5.6.
 
 Installation
