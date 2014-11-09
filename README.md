@@ -21,15 +21,15 @@ Make it executable, and set a cronjob
 
 Examples
 ---------
-Create incremental backups each hour, and a full backup each 24 hours. Retention set to 1 week.
-  Set "hoursBeforeFull" to 24  
-  Set "keepDays" to 7  
-  Add a cronjob "0 * * * * /usr/local/bin/autoxtrabackup"
+Create incremental backups each hour, and a full backup each 24 hours. Retention set to 1 week.  
+  - Set "hoursBeforeFull" to 24  
+  - Set "keepDays" to 7  
+  - Add a cronjob "0 * * * * /usr/local/bin/autoxtrabackup"
 
 Don't create incremental backups. Create a full backup every day at 23h, retention set to 1 week.
-  Set "hoursBeforeFull" to 1
-  Set "keepDays" to 7
-  Add a cronjob "0 23 * * * /usr/local/bin/autoxtrabackup"
+  - Set "hoursBeforeFull" to 1
+  - Set "keepDays" to 7
+  - Add a cronjob "0 23 * * * /usr/local/bin/autoxtrabackup"
 
 Remarks
 -------
