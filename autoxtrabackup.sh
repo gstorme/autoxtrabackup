@@ -26,6 +26,9 @@ dateNow=`date +%Y-%m-%d_%H-%M-%S`
 dateNowUnix=`date +%s`
 backupLog=/tmp/backuplog
 delDay=`date -d "-$keepDays days" +%Y-%m-%d`
+if [ -f "$backupDir"/latest_full ]; then
+        lastFull=`cat "$backupDir"/latest_full`
+fi
 
 # Check if you set a correct retention
 if [ $(($keepDays * 24)) -le $hoursBeforeFull ]; then
@@ -35,56 +38,53 @@ fi
 
 # If you enabled sendEmail, check if you also set a recipient
 if [[ -z $emailAddress ]] && [[ $sendEmail == onerror ]]; then
- echo "Error, you have enabled sendEmail but you have not configured any recipient"
- exit 1
+        echo "Error, you have enabled sendEmail but you have not configured any recipient"
+        exit 1
 elif [[ -z $emailAddress ]] && [[ $sendEmail == always ]]; then
- echo "Error, you have enabled sendEmail but you have not configured any recipient"
- exit 1
+        echo "Error, you have enabled sendEmail but you have not configured any recipient"
+        exit 1
 fi
 
 # If compression is enabled, pass it on to the backup command
 if [[ $compression == true ]]; then
- compress="--compress"
+        compress="--compress"
 else
- compress=
+        compress=
 fi
 
 # Check for an existing full backup
-if [ -f "$backupDir"/latest_full ]; then
- #echo "Latest full backup information found... continuing"
- lastFull=`cat "$backupDir"/latest_full`
+if [ ! -f "$backupDir"/latest_full ]; then
+        #echo "Latest full backup information not found... taking a first full backup now"
+        echo $dateNowUnix > "$backupDir"/latest_full
+        lastFull=`cat "$backupDir"/latest_full`
+        /usr/bin/innobackupex --user=$mysqlUser --password=$mysqlPwd --no-timestamp $compress --rsync "$backupDir"/"$dateNow"_full > $backupLog 2>&1
 else
- #echo "Latest full backup information not found... taking a first full backup now"
- echo $dateNowUnix > "$backupDir"/latest_full
- lastFull=`cat "$backupDir"/latest_full`
- /usr/bin/innobackupex --user=$mysqlUser --password=$mysqlPwd --no-timestamp $compress --rsync "$backupDir"/"$dateNow"_full > $backupLog 2>&1
-fi
+        # Calculate the time since the last full backup
+        difference=$((($dateNowUnix - $lastFull) / 60 / 60))
 
-# Calculate the time since the last full backup
-difference=$((($dateNowUnix - $lastFull) / 60 / 60))
-
-# Check if we must take a full or incremental backup
-if [ $difference -lt $hoursBeforeFull ]; then
- #echo "It's been $difference hours since last full, doing an incremental backup"
- lastFullDir=`date -d@"$lastFull" '+%Y-%m-%d_%H-%M-%S'`
- /usr/bin/innobackupex --user=$mysqlUser --password=$mysqlPwd --no-timestamp $compress --rsync --incremental --incremental-basedir="$backupDir"/"$lastFullDir"_full "$backupDir"/"$dateNow"_incr > $backupLog 2>&1
-else
- #echo "It's been $difference hours since last full backup, time for a new full backup"
- echo $dateNowUnix > "$backupDir"/latest_full
- /usr/bin/innobackupex --user=$mysqlUser --password=$mysqlPwd --no-timestamp $compress --rsync "$backupDir"/"$dateNow"_full > $backupLog 2>&1
+        # Check if we must take a full or incremental backup
+        if [ $difference -lt $hoursBeforeFull ]; then
+                #echo "It's been $difference hours since last full, doing an incremental backup"
+                lastFullDir=`date -d@"$lastFull" '+%Y-%m-%d_%H-%M-%S'`
+                /usr/bin/innobackupex --user=$mysqlUser --password=$mysqlPwd --no-timestamp $compress --rsync --incremental --incremental-basedir="$backupDir"/"$lastFullDir"_full "$backupDir"/"$dateNow"_incr > $backupLog 2>&1
+        else
+                #echo "It's been $difference hours since last full backup, time for a new full backup"
+                echo $dateNowUnix > "$backupDir"/latest_full
+                /usr/bin/innobackupex --user=$mysqlUser --password=$mysqlPwd --no-timestamp $compress --rsync "$backupDir"/"$dateNow"_full > $backupLog 2>&1
+        fi
 fi
 
 # Check if the backup succeeded or failed, and e-mail the logfile, if enabled
 if grep -q "completed OK" $backupLog; then
- #echo "Backup completed OK"
- if [[ $sendEmail == always ]]; then
-  cat $backupLog | mail -s "AutoXtraBackup log" $emailAddress
- fi
+        #echo "Backup completed OK"
+        if [[ $sendEmail == always ]]; then
+                cat $backupLog | mail -s "AutoXtraBackup log" $emailAddress
+        fi
 else
         #echo "Backup FAILED"
         if [[ $sendEmail == always ]] || [[ $sendEmail == onerror ]]; then
                 cat $backupLog | mail -s "AutoXtraBackup log" $emailAddress
- fi
+        fi
         exit 1
 fi
 
