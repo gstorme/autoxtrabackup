@@ -56,6 +56,7 @@ if [ -f "$backupDir"/latest_full ]; then
 else
  #echo "Latest full backup information not found... taking a first full backup now"
  echo $dateNowUnix > "$backupDir"/latest_full
+ lastFull=`cat "$backupDir"/latest_full`
  /usr/bin/innobackupex --user=$mysqlUser --password=$mysqlPwd --no-timestamp $compress --rsync "$backupDir"/"$dateNow"_full > $backupLog 2>&1
 fi
 
@@ -91,6 +92,6 @@ fi
 rm -rf $backupDir/$delDay*
 
 # Delete incremental backups with full backup base directory that was deleted
-for i in `find "$backupDir"/*incr -type f -iname xtrabackup_info |  xargs grep $delDay | awk '{print $10}' | cut -d '=' -f2`; do rm -rf $i; done
+for i in `find "$backupDir"/*incr -type f -iname xtrabackup_info 2>/dev/null |  xargs grep $delDay | awk '{print $10}' | cut -d '=' -f2`; do rm -rf $i; done
 
 exit 0
