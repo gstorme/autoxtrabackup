@@ -8,7 +8,7 @@ Create full & incremental backups automatically, with configurable retention and
 
 Requirements
 ------------
-Percona-xtrabackup, download from http://www.percona.com/software/percona-toolkit  
+Percona-xtrabackup, download from http://www.percona.com/software/percona-xtrabackup  
 This script has been tested on Debian 7 (Wheezy) with percona-xtrabackup 2.2.6  
 It should work on any MySQL distribution, but it has been tested only on Percona Server 5.6.
 
