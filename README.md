@@ -16,7 +16,7 @@ Installation
 ------------
 Copy autoxtrabackup.config to /etc/default/autoxtrabackup and edit the settings  
 This is not mandatory, but recommended. You can also set the settings in the script directly.  
-Copy autoxtrabackup to /usr/local/bin/autoxtrabackup  
+Copy autoxtrabackup.sh to /usr/local/bin/autoxtrabackup  
 Make it executable, and set a cronjob  
 
 Examples
