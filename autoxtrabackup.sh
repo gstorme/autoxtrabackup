@@ -26,8 +26,25 @@ dateNow=`date +%Y-%m-%d_%H-%M-%S`
 dateNowUnix=`date +%s`
 backupLog=/tmp/backuplog
 delDay=`date -d "-$keepDays days" +%Y-%m-%d`
-if [ -f "$backupDir"/latest_full ]; then
-        lastFull=`cat "$backupDir"/latest_full`
+
+# Check if innobackupex is installed (percona-xtrabackup)
+if [[ -z "$(command -v innobackupex)" ]]; then
+        echo "The innobackupex executable was not found, check if you have installed percona-xtrabackup."
+        exit 1
+fi
+
+# Check if backup directory exists
+if [ ! -d "$backupDir" ]; then
+        echo "Backup directory does not exist. Check your config and create the backup directory"
+        exit 1
+fi
+
+# Check if mail is installed
+if [[ $sendEmail == always ]] || [[ $sendEmail == onerror ]]; then
+        if [[ -z "$(command -v mail)" ]]; then
+                echo "You have enabled mail, but mail is not installed or not in PATH environment variable"
+                exit 1
+        fi
 fi
 
 # Check if you set a correct retention
@@ -52,6 +69,10 @@ if [[ $compression == true ]]; then
 else
         compress=
         compressThreads=
+fi
+
+if [ -f "$backupDir"/latest_full ]; then
+        lastFull=`cat "$backupDir"/latest_full`
 fi
 
 # Check for an existing full backup
