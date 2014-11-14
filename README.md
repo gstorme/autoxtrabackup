@@ -8,9 +8,12 @@ Create full & incremental backups automatically, with configurable retention and
 
 Requirements
 ------------
-Percona-xtrabackup, download from http://www.percona.com/software/percona-xtrabackup  
+Supported MySQL distributions: MySQL, Percona Server, MariaDB  
+Supported Linux distributions: Debian, Ubuntu, CentOS, RedHat  
+Dependencies: percona-xtrabackup, download from http://www.percona.com/software/percona-xtrabackup
+
 This script has been tested on Debian 7 (Wheezy) with Percona-server 5.6.  
-Supported MySQL distributions: MySQL, Percona Server, MariaDB, Percona XtraDB Cluster, MariaDB Galera Cluster.
+This script has been tested on CentOS 6.4 with MariaDB-server-10.  
 
 Installation
 ------------
