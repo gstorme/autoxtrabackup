@@ -22,6 +22,8 @@ This is not mandatory, but recommended. You can also set the settings in the scr
 Copy autoxtrabackup.sh to /usr/local/bin/autoxtrabackup  
 Make it executable, and set a cronjob  
 
+The script does not provide standard output. Check /tmp/backuplog  
+
 Examples
 ---------
 Create incremental backups each hour, and a full backup each 24 hours. Retention set to 1 week.  
