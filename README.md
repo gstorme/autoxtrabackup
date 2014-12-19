@@ -31,6 +31,12 @@ Create incremental backups each hour, and a full backup each 24 hours. Retention
   - Set "keepDays" to 7  
   - Add a cronjob "0 * * * * /usr/local/bin/autoxtrabackup"
 
+Create a full backup on Sunday, take incremental backups all other days. Keep backups for 1 month.
+  - Set "hoursBeforeFull" to 168
+  - Set "keepDays" to 31
+  - Create the first backup on Sunday at the desired time, let's take 23h for example
+  - Add a cronjob "0 23 * * * /usr/local/bin/autoxtrabackup"
+
 Don't create incremental backups. Create a full backup every day at 23h, retention set to 1 week.
   - Set "hoursBeforeFull" to 1
   - Set "keepDays" to 7
