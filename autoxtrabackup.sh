@@ -22,6 +22,43 @@ fi
 # No editing should be required below this line
 #####
 
+usage () {
+        echo -e "\tRestore a full backup";
+        echo -e "\t\tRestore a compressed backup:";
+        echo -e "\t\t\tinnobackupex --decompress $backupDir/BACKUP-DIR";
+        echo -e "\t\t\tFollow same steps as for non-compressed backups";
+        echo -e "\t\tRestore a non-compressed backup:";
+        echo -e "\t\t\tinnobackupex --apply-log $backupDir/BACKUP-DIR";
+        echo -e "\t\t\tStop your MySQL server";
+        echo -e "\t\t\tDelete everything in the MySQL data directory (usually /var/lib/mysql)";
+        echo -e "\t\t\tinnobackupex --copy-back $backupDir/BACKUP-DIR";
+        echo -e "\t\t\tRestore the ownership of the files in the MySQL data directory (chown -R mysql:mysql /var/lib/mysql/)";
+        echo -e "\t\t\tStart your MySQL server";
+        echo -e "\tRestore an incremental backup";
+        echo -e "\t\t\tIf compressed, first decompress the backup (see above)";
+        echo -e "\t\t\tFirst, prepare the base backup";
+        echo -e "\t\t\tinnobackupex --apply-log --redo-only $backupDir/FULL-BACKUP-DIR";
+        echo -e "\t\t\tNow, apply the incremental backup to the base backup.";
+        echo -e "\t\t\tIf you have multiple incrementals, pass the --redo-only when merging all incrementals except for the last one. Also, merge them in the chronological order that the backups were made";
+        echo -e "\t\t\tinnobackupex --apply-log --redo-only $backupDir/FULL-BACKUP-DIR --incremental-dir=$backupDir/INC-BACKUP-DIR";
+        echo -e "\t\t\tOnce you merge the base with all the increments, you can prepare it to roll back the uncommitted transactions:";
+        echo -e "\t\t\tinnobackupex --apply-log $backupDir/BACKUP-DIR";
+        echo -e "\t\t\tFollow the same steps as for a full backup restore now";
+}
+
+while getopts ":h" opt; do
+  case $opt in
+        h)
+                usage;
+                exit 0
+                ;;
+        \?)
+                echo "Invalid option: -$OPTARG" >&2
+                exit 1
+                ;;
+  esac
+done
+
 dateNow=`date +%Y-%m-%d_%H-%M-%S`
 dateNowUnix=`date +%s`
 backupLog=/tmp/backuplog
