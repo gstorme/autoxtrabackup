@@ -43,4 +43,6 @@ Incremental backups of MyISAM tables are not possible, a full backup of such tab
 
 Restoring
 ---------
-For information on how to restore a backup with innobackupex, visit http://www.percona.com/doc/percona-xtrabackup/2.1/innobackupex/innobackupex_script.html
+Use "./autoxtrabackup -h" for a quick reference on how to restore backups.
+
+For more detailed information on how to restore a backup with innobackupex, visit http://www.percona.com/doc/percona-xtrabackup/2.2/innobackupex/innobackupex_script.html
