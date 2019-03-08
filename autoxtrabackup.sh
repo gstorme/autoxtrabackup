@@ -13,6 +13,7 @@ hoursBeforeFull=48
 mysqlUser=dbuser
 mysqlPwd=password
 compression=true
+compressThreads=1
 keepDays=7
 sendEmail=never
 emailAddress=
